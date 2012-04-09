@@ -18,7 +18,7 @@ object Application extends Controller {
   /**
    * This result directly redirect to the application home.
    */
-  val Home = Redirect(routes.Application.list(0, 2, ""))
+  val Home = Redirect(routes.Application.list(""))
   
   /**
    * Describe the computer form (used in both edit and create screens).
@@ -43,15 +43,10 @@ object Application extends Controller {
   /**
    * Display the paginated list of computers.
    *
-   * @param page Current page number (starts from 0)
-   * @param orderBy Column to be sorted
    * @param filter Filter applied on computer names
    */
-  def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
-    Ok(html.list(
-      Computer.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
-      orderBy, filter
-    ))
+  def list(filter: String) = Action { implicit request =>
+    Ok(html.list(Computer.list("%"+filter+"%"), filter))
   }
   
   /**

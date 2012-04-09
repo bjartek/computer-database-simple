@@ -11,14 +11,6 @@ import anorm.SqlParser._
 case class Company(id: Pk[Long] = NotAssigned, name: String)
 case class Computer(id: Pk[Long] = NotAssigned, name: String, introduced: Option[Date], discontinued: Option[Date], companyId: Option[Long])
 
-/**
- * Helper for pagination.
- */
-case class Page[A](items: Seq[A], page: Int, offset: Long, total: Long) {
-  lazy val prev = Option(page - 1).filter(_ >= 0)
-  lazy val next = Option(page + 1).filter(_ => (offset + items.size) < total)
-}
-
 object Computer {
   
   // -- Parsers
@@ -62,39 +54,19 @@ object Computer {
    * @param orderBy Computer property used for sorting
    * @param filter Filter applied on the name column
    */
-  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(Computer, Option[Company])] = {
-    
-    val offest = pageSize * page
+  def list(filter: String = "%"): List[(Computer, Option[Company])] = {
     
     DB.withConnection { implicit connection =>
       
-      val computers = SQL(
+     SQL(
         """
           select * from computer 
-          left join company on computer.company_id = company.id
-          where computer.name like {filter}
-          order by {orderBy} nulls last
-          limit {pageSize} offset {offset}
-        """
-      ).on(
-        'pageSize -> pageSize, 
-        'offset -> offest,
-        'filter -> filter,
-        'orderBy -> orderBy
-      ).as(Computer.withCompany *)
-
-      val totalRows = SQL(
-        """
-          select count(*) from computer 
           left join company on computer.company_id = company.id
           where computer.name like {filter}
         """
       ).on(
         'filter -> filter
-      ).as(scalar[Long].single)
-
-      Page(computers, page, offest, totalRows)
-      
+      ).as(Computer.withCompany *)
     }
     
   }
