@@ -5,4 +5,4 @@ There are several branches in this repo:
  - simple-anorm: simplified. remove pagination, tests and sorting
  - simple-mongo: the finished ported application
 
-The goal of this repo is to be used in a hands-on demonistration on how to port a anorm based play application to a mongodb one.
+The goal of this repo is to be used in a hands-on demonstration on how to port a anorm based play application to a mongodb one.
