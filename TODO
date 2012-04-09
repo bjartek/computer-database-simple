@@ -1,0 +1,8 @@
+Tasks that needs to be done to port to mongodb
+ - add import in build configuration
+ - remove database configuration
+ - add configuration of mongodb and ability to import data into mongodb
+ - routes, mongodb uses strings for id's
+ - views, mongodb uses strings for id's and DAO pattern not ActiveRecord
+ - model, change case classes to use Casbah type id's and implement DAO's
+ - controllers, change methods to use DAO's
