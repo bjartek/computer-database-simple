@@ -11,4 +11,7 @@ This example has been simplified from the standard example in play 2.0 in order 
  - removed pagination
  - removed sorting of columns
 
-
+There are several branches in this repo:
+ - original: this is the original example from play-2.0 distribution
+ - simple-anorm: this is the same example only simplified as mentioned above
+ - simple-mongo: the finished ported application
