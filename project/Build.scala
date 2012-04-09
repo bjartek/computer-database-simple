@@ -4,15 +4,14 @@ import PlayProject._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "computer-database-simple"
-    val appVersion      = "1.0-SNAPSHOT"
+    val appName         = "computer-database"
+    val appVersion      = "1.0"
 
-    val appDependencies = Seq(
-      // Add your project dependencies here,
-    )
+    val appDependencies = Nil
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
       // Add your own project settings here      
     )
 
 }
+            
