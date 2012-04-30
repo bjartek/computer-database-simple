@@ -9,7 +9,12 @@ import com.novus.salat.annotations._
 import com.mongodb.casbah.Imports._
 import models.SalatImports._
 
-case class Computer(@Key("_id") id: ObjectId= new ObjectId, name: String, introduced: Option[Date], discontinued: Option[Date], companyId: Option[Long])
+case class Computer(
+  @Key("_id") id: ObjectId= new ObjectId, 
+  name: String, 
+  introduced: Option[Date], 
+  discontinued: Option[Date], 
+  companyId: Option[ObjectId])
 
 object ComputerDAO extends SalatDAO[Computer, ObjectId](collection = mongoCollection("computers")) {
 
