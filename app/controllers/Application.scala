@@ -4,8 +4,7 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
-
-import anorm._
+import com.mongodb.casbah.Imports._
 
 import views._
 import models._
@@ -25,12 +24,12 @@ object Application extends Controller {
    */ 
   val computerForm = Form(
     mapping(
-      "id" -> ignored(NotAssigned:Pk[Long]),
+      "id" -> ignored(new ObjectId()),
       "name" -> nonEmptyText,
       "introduced" -> optional(date("yyyy-MM-dd")),
       "discontinued" -> optional(date("yyyy-MM-dd")),
-      "company" -> optional(longNumber)
-    )(Computer.apply)(Computer.unapply)
+      "company" -> optional(text)
+    )(Computer.fromForm)(Computer.toForm)
   )
   
   // -- Actions
