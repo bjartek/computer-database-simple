@@ -31,7 +31,7 @@ object ComputerDAO extends SalatDAO[Computer, ObjectId](collection = mongoCollec
 
 
   def list(filter: String = ""): Seq[(Computer, Option[Company])] = {
-    val where = if(filter == "")  MongoDBObject.empty else MongoDBObject( "name" -> (""".*""").r)
+    val where = if(filter == "")  MongoDBObject.empty else MongoDBObject( "name" -> (""".*"""+filter+""".*""").r)
     val computers = find(where).toSeq
 
     computers.map{ computer => 
