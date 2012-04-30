@@ -4,14 +4,20 @@ import PlayProject._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "computer-database"
-    val appVersion      = "1.0"
+    val appName         = "computer-database-simpl"
+    val appVersion      = "1.0-SNAPSHOT"
 
-    val appDependencies = Nil
+    val novusRels = "repo.novus rels" at "http://repo.novus.com/releases/"
+
+
+    val appDependencies = Seq(
+      "com.mongodb.casbah" %% "casbah" % "2.1.5-1",
+      "com.novus" %% "salat-core" % "0.0.8-SNAPSHOT"
+    )
+
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
       // Add your own project settings here      
     )
 
 }
-            
