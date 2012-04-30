@@ -1,10 +1,6 @@
 package models
 
-import play.api._
-
 import java.util.{Date}
-
-import play.api.Play.current
 
 import com.novus.salat._
 import com.novus.salat.global._
