@@ -1,4 +1,4 @@
-@(id: Long, computerForm: Form[Computer])
+@(id: String, computerForm: Form[Computer])
 
 @import helper._
 
@@ -18,7 +18,7 @@
             
             @select(
                 computerForm("company"), 
-                Company.options, 
+                CompanyDAO.options, 
                 '_label -> "Company", '_default -> "-- Choose a company --",
                 '_showConstraints -> false
             )

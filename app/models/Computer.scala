@@ -30,12 +30,12 @@ object Computer {
 object ComputerDAO extends SalatDAO[Computer, ObjectId](collection = mongoCollection("computers")) {
 
 
-  def list(filter: String = ""): List[(Computer, Option[Company])] = {
+  def list(filter: String = ""): Seq[(Computer, Option[Company])] = {
     val where = if(filter == "")  MongoDBObject.empty else MongoDBObject( "name" -> (""".*""").r)
     val computers = find(where).toSeq
 
     computers.map{ computer => 
-      val company = computer.companyId.flatMap( id => CompanyDAO.find(id))
+      val company = computer.companyId.flatMap( id => CompanyDAO.findOneByID(id))
       (computer, company)
     }
   }

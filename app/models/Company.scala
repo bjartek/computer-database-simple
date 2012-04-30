@@ -14,7 +14,7 @@ case class Company(@Key("_id") id: ObjectId= new ObjectId, name: String)
 object CompanyDAO extends SalatDAO[Company, ObjectId](collection = mongoCollection("company")) {
 
   def options: Seq[(String,String)] = { 
-    find(MongoDBObject.empty).map(company => (company.id.toString, company.name))
+    find(MongoDBObject.empty).map(company => (company.id.toString, company.name)).toSeq
   }
 
 }
