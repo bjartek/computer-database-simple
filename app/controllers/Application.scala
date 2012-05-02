@@ -4,8 +4,7 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
-
-import anorm._
+import com.mongodb.casbah.Imports._
 
 import views._
 import models._
@@ -25,12 +24,12 @@ object Application extends Controller {
    */ 
   val computerForm = Form(
     mapping(
-      "id" -> ignored(NotAssigned:Pk[Long]),
+      "id" -> ignored(new ObjectId()),
       "name" -> nonEmptyText,
       "introduced" -> optional(date("yyyy-MM-dd")),
       "discontinued" -> optional(date("yyyy-MM-dd")),
-      "company" -> optional(longNumber)
-    )(Computer.apply)(Computer.unapply)
+      "company" -> optional(text)
+    )(Computer.fromForm)(Computer.toForm)
   )
   
   // -- Actions
@@ -46,7 +45,7 @@ object Application extends Controller {
    * @param filter Filter applied on computer names
    */
   def list(filter: String) = Action { implicit request =>
-    Ok(html.list(Computer.list("%"+filter+"%"), filter))
+    Ok(html.list(ComputerDAO.list(filter), filter))
   }
   
   /**
@@ -54,8 +53,8 @@ object Application extends Controller {
    *
    * @param id Id of the computer to edit
    */
-  def edit(id: Long) = Action {
-    Computer.findById(id).map { computer =>
+  def edit(id: String) = Action {
+    ComputerDAO.findOneByID(new ObjectId(id)).map { computer =>
       Ok(html.editForm(id, computerForm.fill(computer)))
     }.getOrElse(NotFound)
   }
@@ -65,11 +64,11 @@ object Application extends Controller {
    *
    * @param id Id of the computer to edit
    */
-  def update(id: Long) = Action { implicit request =>
+  def update(id: String) = Action { implicit request =>
     computerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.editForm(id, formWithErrors)),
       computer => {
-        Computer.update(id, computer)
+        ComputerDAO.save(computer.copy(id = new ObjectId(id)))
         Home.flashing("success" -> "Computer %s has been updated".format(computer.name))
       }
     )
@@ -89,7 +88,7 @@ object Application extends Controller {
     computerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.createForm(formWithErrors)),
       computer => {
-        Computer.insert(computer)
+        ComputerDAO.insert(computer)
         Home.flashing("success" -> "Computer %s has been created".format(computer.name))
       }
     )
@@ -98,8 +97,8 @@ object Application extends Controller {
   /**
    * Handle computer deletion.
    */
-  def delete(id: Long) = Action {
-    Computer.delete(id)
+  def delete(id: String) = Action {
+    ComputerDAO.remove(MongoDBObject("_id" -> new ObjectId(id)))
     Home.flashing("success" -> "Computer has been deleted")
   }
 
