@@ -5,6 +5,12 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 
+import org.bson.types.ObjectId
+import se.radley.plugin.salat._
+import se.radley.plugin.salat.Formats._
+import com.novus.salat._
+import com.mongodb.casbah.Imports._
+
 import anorm._
 
 import views._
@@ -25,11 +31,11 @@ object Application extends Controller {
    */ 
   val computerForm = Form(
     mapping(
-      "id" -> ignored(NotAssigned:Pk[Long]),
+      "id" -> ignored(new ObjectId),
       "name" -> nonEmptyText,
       "introduced" -> optional(date("yyyy-MM-dd")),
       "discontinued" -> optional(date("yyyy-MM-dd")),
-      "company" -> optional(longNumber)
+      "company" -> optional( of[ObjectId] )
     )(Computer.apply)(Computer.unapply)
   )
   
@@ -54,7 +60,7 @@ object Application extends Controller {
    *
    * @param id Id of the computer to edit
    */
-  def edit(id: Long) = Action {
+  def edit(id: ObjectId) = Action {
     Computer.findById(id).map { computer =>
       Ok(html.editForm(id, computerForm.fill(computer), Company.options))
     }.getOrElse(NotFound)
@@ -65,7 +71,7 @@ object Application extends Controller {
    *
    * @param id Id of the computer to edit
    */
-  def update(id: Long) = Action { implicit request =>
+  def update(id: ObjectId) = Action { implicit request =>
     computerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.editForm(id, formWithErrors, Company.options)),
       computer => {
@@ -98,7 +104,7 @@ object Application extends Controller {
   /**
    * Handle computer deletion.
    */
-  def delete(id: Long) = Action {
+  def delete(id: ObjectId) = Action {
     Computer.delete(id)
     Home.flashing("success" -> "Computer has been deleted")
   }
