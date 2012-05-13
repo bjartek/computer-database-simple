@@ -3,6 +3,9 @@ This is a simplified version of the computer-database example from play 2.0 dist
 There are several branches in this repo:
  - original: this is the original example from play-2.0 distribution
  - simple-anorm: simplified. remove pagination, tests and sorting
- - simple-mongo: the finished ported application
+ - simple-mongo: the finished ported application. NB! Deprecated! Does not use plugin
+ - simple-mongo-with-tags: the finished ported application: NB! Deprecated! Does not use plugin
+ - jbmay: Demo done at javabin Sørlandet May meeting. NB! Deprecated! Does not use plugin
+
 
 The goal of this repo is to be used in a hands-on demonstration on how to port a anorm based play application to a mongodb one.
