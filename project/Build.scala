@@ -7,7 +7,7 @@ object ApplicationBuild extends Build {
     val appName         = "computer-database"
     val appVersion      = "1.0"
 
-    val appDependencies = Seq(.
+    val appDependencies = Seq(
      "se.radley" %% "play-plugins-salat" % "1.0.3"
    )
 

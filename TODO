@@ -1,6 +1,6 @@
 Tasks that needs to be done to port to mongodb
- - enable salat plugin in Build configuration
- - remove database configuration and add mongodb configuration
+ X enable salat plugin in Build configuration
+ X remove database configuration and add mongodb configuration
  - routes, mongodb uses ObjectId for id's
  - views, mongodb uses ObjectId for id's 
  - model, change case classes to use Casbah type id's and implement the needed queries
