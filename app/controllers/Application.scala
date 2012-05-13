@@ -52,7 +52,7 @@ object Application extends Controller {
    * @param filter Filter applied on computer names
    */
   def list(filter: String) = Action { implicit request =>
-    Ok(html.list(Computer.list("%"+filter+"%"), filter))
+    Ok(html.list(Computer.list(filter), filter))
   }
   
   /**
@@ -61,7 +61,7 @@ object Application extends Controller {
    * @param id Id of the computer to edit
    */
   def edit(id: ObjectId) = Action {
-    Computer.findById(id).map { computer =>
+    Computer.findOneByID(id).map { computer =>
       Ok(html.editForm(id, computerForm.fill(computer), Company.options))
     }.getOrElse(NotFound)
   }
@@ -75,7 +75,7 @@ object Application extends Controller {
     computerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.editForm(id, formWithErrors, Company.options)),
       computer => {
-        Computer.update(id, computer)
+        Computer.save(computer.copy(id = id))
         Home.flashing("success" -> "Computer %s has been updated".format(computer.name))
       }
     )
@@ -105,7 +105,7 @@ object Application extends Controller {
    * Handle computer deletion.
    */
   def delete(id: ObjectId) = Action {
-    Computer.delete(id)
+    Computer.removeById(id)
     Home.flashing("success" -> "Computer has been deleted")
   }
 
