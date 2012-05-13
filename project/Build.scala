@@ -7,10 +7,13 @@ object ApplicationBuild extends Build {
     val appName         = "computer-database"
     val appVersion      = "1.0"
 
-    val appDependencies = Nil
+    val appDependencies = Seq(.
+     "se.radley" %% "play-plugins-salat" % "1.0.3"
+   )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-      // Add your own project settings here      
+      routesImport += "se.radley.plugin.salat.Binders._",
+      templatesImport += "org.bson.types.ObjectId"
     )
 
 }
