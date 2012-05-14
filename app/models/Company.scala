@@ -12,7 +12,7 @@ case class Company(
 )
 
 object Company extends ModelCompanion[Company, ObjectId] {
-  val collection = mongoCollection("companies")
+  val collection = mongoCollection("company")
   val dao = new SalatDAO[Company, ObjectId](collection = collection) {}
 
   def options: Seq[(String,String)] = {
