@@ -1,5 +1,6 @@
 package models
 
+import java.util.{Date}
 import play.api.Play.current
 import com.novus.salat._
 import com.novus.salat.dao._
@@ -11,7 +12,7 @@ case class Computer(
   name: String, 
   introduced: Option[Date] = None, 
   discontinued: Option[Date] = None, 
-  @Key("company_id") companyId: Option[Long])
+  @Key("company_id") companyId: Option[ObjectId])
 
 object Computer extends ModelCompanion[Computer, ObjectId] {
   val collection = mongoCollection("computers")

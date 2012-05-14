@@ -5,7 +5,11 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 
-import anorm._
+import org.bson.types.ObjectId
+import se.radley.plugin.salat._
+import se.radley.plugin.salat.Formats._
+import com.novus.salat._
+import com.mongodb.casbah.Imports._
 
 import views._
 import models._
@@ -25,11 +29,11 @@ object Application extends Controller {
    */ 
   val computerForm = Form(
     mapping(
-      "id" -> ignored(NotAssigned:Pk[Long]),
+      "id" -> ignored(new ObjectId),
       "name" -> nonEmptyText,
       "introduced" -> optional(date("yyyy-MM-dd")),
       "discontinued" -> optional(date("yyyy-MM-dd")),
-      "company" -> optional(longNumber)
+      "company" -> optional(of[ObjectId])
     )(Computer.apply)(Computer.unapply)
   )
   
@@ -46,7 +50,7 @@ object Application extends Controller {
    * @param filter Filter applied on computer names
    */
   def list(filter: String) = Action { implicit request =>
-    Ok(html.list(Computer.list("%"+filter+"%"), filter))
+    Ok(html.list(Computer.list(filter), filter))
   }
   
   /**
@@ -54,8 +58,8 @@ object Application extends Controller {
    *
    * @param id Id of the computer to edit
    */
-  def edit(id: Long) = Action {
-    Computer.findById(id).map { computer =>
+  def edit(id: ObjectId) = Action {
+    Computer.findOneByID(id).map { computer =>
       Ok(html.editForm(id, computerForm.fill(computer), Company.options))
     }.getOrElse(NotFound)
   }
@@ -65,11 +69,11 @@ object Application extends Controller {
    *
    * @param id Id of the computer to edit
    */
-  def update(id: Long) = Action { implicit request =>
+  def update(id: ObjectId) = Action { implicit request =>
     computerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.editForm(id, formWithErrors, Company.options)),
       computer => {
-        Computer.update(id, computer)
+        Computer.save(computer.copy(id = id))
         Home.flashing("success" -> "Computer %s has been updated".format(computer.name))
       }
     )
@@ -98,8 +102,8 @@ object Application extends Controller {
   /**
    * Handle computer deletion.
    */
-  def delete(id: Long) = Action {
-    Computer.delete(id)
+  def delete(id: ObjectId) = Action {
+    Computer.removeById(id)
     Home.flashing("success" -> "Computer has been deleted")
   }
 
