@@ -21,15 +21,12 @@ object Computer extends ModelCompanion[Computer, ObjectId] {
 
   def list(filter: String = ""): List[(Computer, Option[Company])] = {
     val where = if(filter == "") MongoDBObject.empty else MongoDBObject("name" ->(""".*"""+ filter +""".*""").r)
-    
-    val computers = find(where)
+    find(where).map(withCompany).toList
+   }
 
-    val computersWithCompany = computers.map{ computer =>
-      val company = computer.companyId.flatMap(id => Company.findOneByID(id))
-      (computer, company)
-     }
-
-   computersWithCompany.toList
+  def withCompany(computer:Computer) = {
+    val company = computer.companyId.flatMap(id => Company.findOneByID(id))
+   (computer, company)
   }
 }
 
