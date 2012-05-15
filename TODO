@@ -3,5 +3,5 @@ Tasks that needs to be done to port to mongodb
  X remove database configuration and add mongodb configuration
  - routes, mongodb uses ObjectId for id's
  - views, mongodb uses ObjectId for id's 
- - model, change case classes to use Casbah type id's and implement the needed queries
+ X model, change case classes to use Casbah type id's and implement the needed queries
  - controllers, change methods to use the new ModelCompanion queries. 

@@ -1,5 +1,6 @@
 package models
 
+import java.util.{Date}
 import play.api.Play.current
 import com.novus.salat._
 import com.novus.salat.dao._
@@ -19,7 +20,7 @@ object Computer extends ModelCompanion[Computer, ObjectId] {
   val dao = new SalatDAO[Computer, ObjectId](collection = collection) {}
 
   def list(filter: String = ""): List[(Computer, Option[Company])] = {
-    val where = if(filter = "") MongoDBObject.empty else MongoDBObject("name" ->(""".*"""+ filter +""".*""").r)
+    val where = if(filter == "") MongoDBObject.empty else MongoDBObject("name" ->(""".*"""+ filter +""".*""").r)
     find(where).map(withCompany).toList
   }
 
